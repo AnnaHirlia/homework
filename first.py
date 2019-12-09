@@ -21,10 +21,140 @@ while i < max_list:
 
 print( my_list )
 
-
-
 from datetime import datetime
 start_time = datetime.now()
-# do your work here
+try:
+    f = open("ai183.txt", "r")
+except IOError:
+    print("Error! such a file does not exist")
+    print("Сheck if this file is in the folder with the code")
+    exit()
+    
+  test1, test2 = False, False
+array = []
+while True:
+    temp = f.read(1)
+if not temp:
+        break
+if temp == "3":
+        test1 = True
+        temp = f.read(1)
+            if temp == ":":
+                test2 = True
+                
+ if test1 == True and test2 == True:
+        f.seek(f.tell() + 1)
+        temp = f.read(1)
+
+        while temp != "}":
+            array.append(temp)
+            temp = f.read(1)
+        break
+
+f.close()
+
+arrayMergeSort, arrayQuickSort, arrayHeapSort = [], [], []
+
+for i in range(len(array)):
+    arrayMergeSort.append(array[i])
+    arrayQuickSort.append(array[i])
+    arrayHeapSort.append(array[i])
+
+start_time = datetime.now()
+
+
+def mergeSort(arrayMergeSort):
+    if len(arrayMergeSort) > 1:
+        mid = len(arrayMergeSort) // 2
+        leftHalf = arrayMergeSort[:mid]
+        rightHalf = arrayMergeSort[mid:]
+
+        mergeSort(leftHalf)
+        mergeSort(rightHalf)
+
+        i, j, k = 0, 0, 0
+        while i < len(leftHalf) and j < len(rightHalf):
+            if leftHalf[i] < rightHalf[j]:
+                arrayMergeSort[k] = leftHalf[i]
+                i += 1
+            else:
+                arrayMergeSort[k] = rightHalf[j]
+                j += 1
+            k += 1
+
+        while i < len(leftHalf):
+            arrayMergeSort[k] = leftHalf[i]
+            i += 1
+            k += 1
+
+        while j < len(rightHalf):
+            arrayMergeSort[k] = rightHalf[j]
+            j += 1
+            k += 1
+
+
+def quickPas(arrayQuickSort):
+    less, equal, greater = [], [], []
+
+    if len(arrayQuickSort) > 1:
+        pivot = arrayQuickSort[0]
+        for x in arrayQuickSort:
+            if x < pivot:
+                less.append(x)
+            if x == pivot:
+                equal.append(x)
+            if x > pivot:
+                greater.append(x)
+        return quickPas(less) + equal + quickPas(greater)
+    else:
+        return arrayQuickSort
+
+
+def heapSort(arrayHeapSort):
+    def siftDown(parent, limit):
+        item = arrayHeapSort[parent]
+        while True:
+            child = (parent << 1) + 1
+            if child >= limit:
+                break
+            if child + 1 < limit and arrayHeapSort[child] < arrayHeapSort[child + 1]:
+                child += 1
+            if item < arrayHeapSort[child]:
+                arrayHeapSort[parent] = arrayHeapSort[child]
+                parent = child
+            else:
+                break
+        arrayHeapSort[parent] = item
+
+    length = len(arrayHeapSort)
+    for index in range((length >> 1) - 1, -1, -1):
+        siftDown(index, length)
+    for index in range(length - 1, 0, -1):
+        arrayHeapSort[0], arrayHeapSort[index] = arrayHeapSort[index], arrayHeapSort[0]
+        siftDown(0, index)
+
+
+start_time = datetime.now()
+mergeSort(arrayMergeSort)
+end_time = datetime.now()
+print("Merge sort:\n", arrayMergeSort)
+print('Duration: {}'.format(end_time - start_time))
+
+start_time = datetime.now()
+temp = quickPas(arrayQuickSort)
+end_time = datetime.now()
+print("\nQuick sort:\n", temp)
+print('Duration: {}'.format(end_time - start_time))
+
+heapSort(arrayHeapSort)
+print("\nHeap sort:\n", arrayHeapSort)
+print('Duration: {}'.format(end_time - start_time))
+                
+                
+                
+                
+                
+                
+                
 end_time = datetime.now()
 print('Duration: {}'.format(end_time - start_time))
